@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COGNIVON</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Enable Tailwind dark mode class strategy -->
+    <script>
+      tailwind.config = {
+        darkMode: 'class'
+      };
+    </script>
+
+    <!-- p5.js for background animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+
+    <style>
+      #p5-container canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -10;
+        pointer-events: none;
+      }
+
+      @keyframes fadeInUp {
+        0% {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .fade-in {
+        animation: fadeInUp 1s ease-out forwards;
+        will-change: transform, opacity;
+      }
+
+      button:focus {
+        outline: none;
+      }
+    </style>
+  </head>
+
+  <body class="bg-white text-black dark:bg-black dark:text-white overflow-hidden pt-20 transition-colors duration-500">
+    <!-- Top Navigation Bar -->
+    <div class="fixed top-0 left-0 w-full bg-white/30 dark:bg-black/30 backdrop-blur-sm z-20">
+      <div class="max-w-screen-xl mx-auto px-4 py-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold text-gray-900 dark:text-white">COGNIVON</h1>
+        <button
+          id="darkModeToggle"
+          class="text-sm text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 px-3 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+        >
+          Dark Mode
+        </button>
+      </div>
+    </div>
+
+    <!-- Canvas container -->
+    <div id="p5-container" class="fixed top-0 left-0 w-full h-full -z-10"></div>
+
+    <!-- Centered Hero Section -->
+    <div class="min-h-screen flex items-center justify-center px-4">
+      <div
+        class="max-w-2xl w-full space-y-8 text-center backdrop-blur-sm bg-white/80 dark:bg-black/70 rounded-lg p-8 transform -translate-y-16 fade-in transition-colors duration-500"
+      >
+        <!-- Heading -->
+        <h2 class="text-4xl font-bold leading-tight">
+          Transforming Everyday<br />
+          Lives through AI-Powered<br />
+          Solutions
+        </h2>
+
+        <!-- Subtext -->
+        <p class="text-gray-800 dark:text-gray-300 text-lg">
+          We build AI tools that make life easier, smarter, and more human. 
+          From automation to smart assistants and predictive insights — we make AI work for you.
+        </p>
+
+        <!-- CTA Button -->
+        <button
+          id="openModal"
+          class="bg-black dark:bg-white text-white dark:text-black px-6 py-3 rounded-md text-lg font-semibold hover:opacity-90 transition-transform duration-200"
+        >
+          Free Consultation
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div
+      id="emailModal"
+      class="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50 hidden"
+    >
+      <div class="bg-white dark:bg-black text-black dark:text-white rounded-lg p-6 shadow-lg max-w-sm w-full text-center space-y-4 relative">
+        <h3 class="text-xl font-semibold">Let’s Talk!</h3>
+        <p class="text-lg break-all" id="emailText">hello@cognivon.com</p>
+
+        <!-- Copy Button -->
+        <button
+          id="copyEmail"
+          class="flex items-center gap-2 mx-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8 16h8M8 12h8m-7 8h6m2 4H6a2 2 0 01-2-2V6a2 2 0 012-2h5l2 2h7a2 2 0 012 2v12a2 2 0 01-2 2z" />
+          </svg>
+          <span id="copyLabel">Copy Email</span>
+        </button>
+
+        <!-- Close Button -->
+        <button
+          id="closeModal"
+          class="absolute top-2 right-3 text-gray-500 hover:text-black dark:hover:text-white text-xl"
+        >
+          &times;
+        </button>
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+      const toggle = document.getElementById('darkModeToggle');
+      const htmlEl = document.documentElement;
+
+      function updateToggleText() {
+        toggle.textContent = htmlEl.classList.contains('dark') ? 'Light Mode' : 'Dark Mode';
+      }
+
+      updateToggleText();
+
+      toggle.addEventListener('click', () => {
+        htmlEl.classList.toggle('dark');
+        updateToggleText();
+      });
+
+      const openModal = document.getElementById("openModal");
+      const closeModal = document.getElementById("closeModal");
+      const emailModal = document.getElementById("emailModal");
+      const copyEmail = document.getElementById("copyEmail");
+      const copyLabel = document.getElementById("copyLabel");
+      const emailText = document.getElementById("emailText").textContent;
+
+      openModal.addEventListener("click", () => {
+        emailModal.classList.remove("hidden");
+      });
+
+      closeModal.addEventListener("click", () => {
+        emailModal.classList.add("hidden");
+        copyLabel.textContent = "Copy Email";
+      });
+
+      copyEmail.addEventListener("click", () => {
+        navigator.clipboard.writeText(emailText);
+        copyLabel.textContent = "Copied!";
+        setTimeout(() => {
+          copyLabel.textContent = "Copy Email";
+        }, 2000);
+      });
+    </script>
+
+    <!-- Background animation script -->
+    <script src="sketch.js"></script>
+  </body>
+</html>
